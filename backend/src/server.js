@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 
 import notesRoutes from './routes/notesRoutes.js';  
 import { connectDB } from './config/db.js';
@@ -11,11 +12,15 @@ dotenv.config();
 //console.log(process.env.MONGO_URI);
 //const express = require('express'`);
 const app =express();
-app.use(
+const PORT = process.env.PORT || 5001;
+const __dirname = path.resolve();
+
+if(process.env.NODE_ENV !== 'production'){
+    app.use(
     cors({
         origin:"http://localhost:5173",
     })
-);
+);}
 app.use(express.json());
 //middleware to parse JSON bodies
 
@@ -27,8 +32,14 @@ app.use(rateLimiter);
 // });
 
 app.use("/api/notes",notesRoutes);
+
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static(path.join(__dirname,'../frontend/dist'))); 
+app.get('*',(req,res)=>{
+    res.sendFile(path.join(__dirname,'../frontend/dist/index.html'));
+});
+}
 //app.use("/api/products",productRoutes);
-const PORT = process.env.PORT || 5001;
 
 connectDB().then(()=>{
     app.listen(PORT, ()=>{
