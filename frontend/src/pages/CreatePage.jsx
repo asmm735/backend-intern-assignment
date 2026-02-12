@@ -9,6 +9,7 @@ const CreatePage = () => {
   //creating states to keep track of user input
   const [title,setTitle] = useState("");
   const [content,setContent] = useState("");
+  const [category,setCategory] = useState("Others");
   const [loading,setLoading] = useState(false);
   const navigate = useNavigate()
 
@@ -23,7 +24,8 @@ const CreatePage = () => {
     try {
       await api.post("/notes",{
         title, 
-        content
+        content,
+        category
       })
       toast.success("note created successfully!")
       navigate("/")
@@ -80,6 +82,24 @@ const CreatePage = () => {
                     onChange={(e)=> setContent(e.target.value)}
                   />
                 </div>
+
+                <div className='form-control mb-4'>
+                  <label className='label'>
+                    <span className='label-text'>
+                      Category
+                    </span>
+                  </label>
+                  <select 
+                    className='select select-bordered'
+                    value={category}
+                    onChange={(e)=> setCategory(e.target.value)}
+                  >
+                    <option value="Personal">Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+                
                 <div className='card-actions justify-end'>
                   <button type='submit' className='btn btn-primary' disabled={loading}>
                     {loading? "Creating...":"Create Note"}

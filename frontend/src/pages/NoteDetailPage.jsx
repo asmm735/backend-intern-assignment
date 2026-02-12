@@ -109,6 +109,23 @@ const NoteDetailPage = () => {
                   />
             </div>
 
+            <div className='form-control mb-4'>
+                  <label className='label'>
+                    <span className='label-text'>
+                      Category
+                    </span>
+                  </label>
+                  <select 
+                    className='select select-bordered'
+                    value={note.category || 'Others'}
+                    onChange={(e)=> setNote({...note, category: e.target.value})}
+                  >
+                    <option value="Personal">Personal</option>
+                    <option value="Work">Work</option>
+                    <option value="Others">Others</option>
+                  </select>
+            </div>
+
 
             <div className='card-actions justify-end'>
                   <button 
